@@ -667,4 +667,27 @@ body {
   .grid-container { padding: .5rem 1rem 4rem; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
   .form-row { grid-template-columns: 1fr; }
   .detail-info { grid-template-columns: 1fr; }
+
+  /* モーダルをボトムシートに */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal {
+    border-radius: 20px 20px 0 0;
+    max-height: 92vh;
+    width: 100%;
+  }
+
+  /* 詳細モーダルも調整 */
+  .detail-card {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .detail-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
 }
