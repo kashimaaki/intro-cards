@@ -1,5 +1,5 @@
 export default function MemberDetail({ member, onClose, onEdit, onDelete }) {
-  const { name, university, gender, part, role, is_waseda, photo_url } = member
+  const { name, university, gender, part, role, is_waseda, photo_url, grade } = member
 
   function handleDelete() {
     onClose()
@@ -28,6 +28,12 @@ export default function MemberDetail({ member, onClose, onEdit, onDelete }) {
               <div className="detail-info-item">
                 <div className="detail-info-label">大学</div>
                 <div className="detail-info-value">{university}</div>
+              </div>
+            )}
+            {grade && (
+              <div className="detail-info-item">
+                <div className="detail-info-label">学年</div>
+                <div className="detail-info-value">{grade}</div>
               </div>
             )}
             {part && (

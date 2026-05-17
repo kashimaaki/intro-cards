@@ -15,6 +15,7 @@ export default function App() {
   const [detailMember, setDetailMember] = useState(null)
   const [filters, setFilters] = useState({
     search: '', gender: '', part: '', role: '', wasedaOnly: false,
+    grade: '', sort: '',
   })
 
   const fetchMembers = useCallback(async () => {
@@ -38,7 +39,23 @@ export default function App() {
     if (filters.part && m.part !== filters.part) return false
     if (filters.role && m.role !== filters.role) return false
     if (filters.wasedaOnly && !m.is_waseda) return false
+    if (filters.grade && m.grade !== filters.grade) return false
     return true
+  })
+
+  const GRADE_ORDER = [
+    '学部1年', '学部2年', '学部3年', '学部4年',
+    '修士1年（M1）', '修士2年（M2）',
+    '博士1年（D1）', '博士2年（D2）',
+  ]
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (!filters.sort) return 0
+    const ai = GRADE_ORDER.indexOf(a.grade ?? '')
+    const bi = GRADE_ORDER.indexOf(b.grade ?? '')
+    const ia = ai === -1 ? 999 : ai
+    const ib = bi === -1 ? 999 : bi
+    return filters.sort === 'grade_asc' ? ia - ib : ib - ia
   })
 
   async function handleDelete(id) {
@@ -54,18 +71,17 @@ export default function App() {
         filters={filters}
         setFilters={setFilters}
         members={members}
-        filteredCount={filtered.length}
+        filteredCount={sorted.length}
       />
       <div className="grid-container">
         {error && <div className="error-banner" style={{gridColumn:'1/-1'}}>⚠️ {error}</div>}
         <MemberGrid
-          members={filtered}
+          members={sorted}
           loading={loading}
           onCardClick={setDetailMember}
         />
       </div>
 
-      {/* 詳細モーダル（カードタップ） */}
       {detailMember && (
         <MemberDetail
           member={detailMember}
@@ -75,7 +91,6 @@ export default function App() {
         />
       )}
 
-      {/* 追加・編集モーダル */}
       {modalOpen && (
         <MemberModal
           member={editTarget}

@@ -1,5 +1,5 @@
 export default function MemberCard({ member, onClick }) {
-  const { name, university, gender, part, role, is_waseda, photo_url } = member
+  const { name, university, gender, part, role, is_waseda, photo_url ,grade } = member
 
   return (
     <div className="member-card" onClick={onClick}>
@@ -21,6 +21,7 @@ export default function MemberCard({ member, onClick }) {
           {part      && <span className="tag tag-part">{part}</span>}
           {role      && <span className="tag tag-role">{role}</span>}
           {gender    && <span className="tag tag-gender">{gender}</span>}
+          {grade      && <span className="tag tag-grade">{grade}</span>}
         </div>
       </div>
     </div>

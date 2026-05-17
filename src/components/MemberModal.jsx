@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { supabase, uploadPhoto } from '../supabaseClient'
-import { PARTS, ROLES } from './constants'
+import { PARTS, ROLES, GRADES } from './constants'
 
 const BLANK = {
   name: '', university: '', gender: '', part: '', role: '',
@@ -158,7 +158,14 @@ export default function MemberModal({ member, onClose, onSaved }) {
               {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
           </div>
-
+          {/* 学年 */}
+          <div className="form-group">
+             <label>学年</label>
+             <select value={form.grade || ''} onChange={e => set('grade', e.target.value)}>
+              <option value="">選択してください</option>
+              {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+             </select>
+          </div>
           {/* 早稲田タグ */}
           <div
             className={`waseda-toggle${form.is_waseda ? ' active' : ''}`}

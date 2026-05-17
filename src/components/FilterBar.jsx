@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { PARTS } from './constants'
+import { PARTS, GRADES } from './constants'
 
 export default function FilterBar({ filters, setFilters, members, filteredCount }) {
   const set = (key, val) => setFilters(f => ({ ...f, [key]: val }))
@@ -42,7 +42,24 @@ export default function FilterBar({ filters, setFilters, members, filteredCount 
         <option value="">パート: すべて</option>
         {PARTS.map(p => <option key={p} value={p}>{p}</option>)}
       </select>
+      <select
+        className="filter-select"
+        value={filters.grade}
+        onChange={e => set('grade', e.target.value)}
+      >
+         <option value="">学年: すべて</option>
+        {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+      </select>
 
+      <select
+        className="filter-select"
+        value={filters.sort}
+        onChange={e => set('sort', e.target.value)}
+      >
+        <option value="">並び替え: 登録順</option>
+        <option value="grade_asc">学年: 1年→博士</option>
+        <option value="grade_desc">学年: 博士→1年</option>
+      </select>
       <select
         className="filter-select"
         value={filters.role}
