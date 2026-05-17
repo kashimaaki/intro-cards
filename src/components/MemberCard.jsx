@@ -1,14 +1,17 @@
-export default function MemberCard({ member, onEdit, onDelete }) {
+export default function MemberCard({ member, onClick }) {
   const { name, university, gender, part, role, is_waseda, photo_url } = member
 
   return (
-    <div className="member-card">
+    <div className="member-card" onClick={onClick}>
       <div className="card-photo-wrap">
         {photo_url
           ? <img src={photo_url} alt={name} loading="lazy" />
           : <div className="card-photo-placeholder">👤</div>
         }
         {is_waseda && <span className="waseda-badge">早稲田</span>}
+        <div className="card-overlay-hint">
+          <span>タップして詳細</span>
+        </div>
       </div>
 
       <div className="card-body">
@@ -18,10 +21,6 @@ export default function MemberCard({ member, onEdit, onDelete }) {
           {part      && <span className="tag tag-part">{part}</span>}
           {role      && <span className="tag tag-role">{role}</span>}
           {gender    && <span className="tag tag-gender">{gender}</span>}
-        </div>
-        <div className="card-actions">
-          <button className="btn-edit" onClick={() => onEdit(member)}>編集</button>
-          <button className="btn-del"  onClick={() => onDelete(member.id)}>削除</button>
         </div>
       </div>
     </div>

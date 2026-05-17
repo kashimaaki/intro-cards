@@ -1,6 +1,6 @@
 import MemberCard from './MemberCard'
 
-export default function MemberGrid({ members, loading, onEdit, onDelete }) {
+export default function MemberGrid({ members, loading, onCardClick }) {
   if (loading) return (
     <div className="loading-overlay">
       <div className="spinner" />
@@ -10,12 +10,12 @@ export default function MemberGrid({ members, loading, onEdit, onDelete }) {
 
   if (members.length === 0) return (
     <div className="empty-state">
-      <p>🎴</p>
+      <div className="empty-icon">🎴</div>
       <p>メンバーが見つかりません。<br />上の「メンバー追加」から登録してください。</p>
     </div>
   )
 
   return members.map(m => (
-    <MemberCard key={m.id} member={m} onEdit={onEdit} onDelete={onDelete} />
+    <MemberCard key={m.id} member={m} onClick={() => onCardClick(m)} />
   ))
 }

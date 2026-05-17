@@ -4,19 +4,17 @@ import Header from './components/Header'
 import FilterBar from './components/FilterBar'
 import MemberGrid from './components/MemberGrid'
 import MemberModal from './components/MemberModal'
+import MemberDetail from './components/MemberDetail'
 
 export default function App() {
   const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
-  const [editTarget, setEditTarget] = useState(null) // null = 新規, object = 編集
+  const [editTarget, setEditTarget] = useState(null)
+  const [detailMember, setDetailMember] = useState(null)
   const [filters, setFilters] = useState({
-    search: '',
-    gender: '',
-    part: '',
-    role: '',
-    wasedaOnly: false,
+    search: '', gender: '', part: '', role: '', wasedaOnly: false,
   })
 
   const fetchMembers = useCallback(async () => {
@@ -33,7 +31,6 @@ export default function App() {
 
   useEffect(() => { fetchMembers() }, [fetchMembers])
 
-  // フィルタリング
   const filtered = members.filter(m => {
     const q = filters.search.toLowerCase()
     if (q && !m.name?.toLowerCase().includes(q) && !m.university?.toLowerCase().includes(q)) return false
@@ -44,24 +41,15 @@ export default function App() {
     return true
   })
 
-  function handleAdd() {
-    setEditTarget(null)
-    setModalOpen(true)
-  }
-  function handleEdit(member) {
-    setEditTarget(member)
-    setModalOpen(true)
-  }
   async function handleDelete(id) {
     if (!window.confirm('このメンバーを削除しますか？')) return
-    const { error } = await supabase.from('members').delete().eq('id', id)
-    if (error) { alert('削除エラー: ' + error.message); return }
+    await supabase.from('members').delete().eq('id', id)
     fetchMembers()
   }
 
   return (
     <div>
-      <Header count={members.length} onAdd={handleAdd} />
+      <Header count={members.length} onAdd={() => { setEditTarget(null); setModalOpen(true) }} />
       <FilterBar
         filters={filters}
         setFilters={setFilters}
@@ -73,10 +61,21 @@ export default function App() {
         <MemberGrid
           members={filtered}
           loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onCardClick={setDetailMember}
         />
       </div>
+
+      {/* 詳細モーダル（カードタップ） */}
+      {detailMember && (
+        <MemberDetail
+          member={detailMember}
+          onClose={() => setDetailMember(null)}
+          onEdit={(m) => { setEditTarget(m); setModalOpen(true) }}
+          onDelete={handleDelete}
+        />
+      )}
+
+      {/* 追加・編集モーダル */}
       {modalOpen && (
         <MemberModal
           member={editTarget}
